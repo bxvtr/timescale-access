@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
----
+## [Unreleased]
 
-## [0.1.0] - 2025-11-29
+## [0.1.0] - 2026-02-19
+
 ### Added
 - Initial release-ready project structure.
 - Core `TimescaleAccess` client for interacting with TimescaleDB/PostgreSQL.
@@ -21,7 +22,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VS Code Devcontainer setup with TimescaleDB and automatic dependency installation.
 - GHCR-ready runtime Dockerfile.
 - MIT license, README, and project metadata.
-
----
-
-## [Unreleased]
