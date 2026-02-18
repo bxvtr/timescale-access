@@ -2,9 +2,7 @@
 
 [![Docs](https://img.shields.io/badge/docs-online-blue)](https://bxvtr.github.io/timescale-access/)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![CI](https://github.com/bxvtr/timescale-access/actions/workflows/ci.yaml/badge.svg)
 ![Docs Build](https://github.com/bxvtr/timescale-access/actions/workflows/docs.yaml/badge.svg)
-![Docker](https://img.shields.io/badge/GHCR-image-blue?logo=docker)
 ![Lint](https://github.com/bxvtr/timescale-access/actions/workflows/lint.yaml/badge.svg)
 
 A lightweight and user-friendly Python wrapper for TimescaleDB/PostgreSQL, designed for time‑series data ingestion, schema management, and convenient querying using SQLAlchemy.  
