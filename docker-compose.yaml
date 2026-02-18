@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/dev.Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    command: sleep infinity
+
+  db:
+    image: docker.io/timescale/timescaledb:2.19.3-pg14
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: superuser
+      POSTGRES_PASSWORD: supersecret
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale-data:/var/lib/postgresql/data
+
+volumes:
+  timescale-data:

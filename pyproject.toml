@@ -1,0 +1,64 @@
+[project]
+name = "timescale-access"
+version = "0.1.0"
+description = "A reusable TimescaleDB / PostgreSQL access wrapper for Python using SQLAlchemy."
+readme = "README.md"
+requires-python = ">=3.9,<3.12"
+authors = [{ name = "bxvtr" }]
+license = { text = "MIT" }
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "sqlalchemy==2.0.40",
+    "pandas==2.2.3",
+    "python-dotenv==1.1.0",
+    "psycopg2-binary==2.9.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.5",
+    "ipdb==0.13.13",
+    "debugpy==1.8.14",
+    "ruff==0.8.4",
+]
+
+docs = [
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-rtd-theme",
+    "sphinx-rtd-dark-mode",
+]
+
+[project.urls]
+Homepage = "https://github.com/bxvtr/timescale-access"
+Source = "https://github.com/bxvtr/timescale-access"
+Issues = "https://github.com/bxvtr/timescale-access/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
+
+[tool.ruff]
+line-length = 90
+exclude = ["docs", ".devcontainer"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I"]
+ignore = ["E501"]

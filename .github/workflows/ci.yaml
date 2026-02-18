@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+  packages: write  # required for GHCR
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: timescale/timescaledb:2.19.3-pg14
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: superuser
+          POSTGRES_PASSWORD: supersecret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U superuser -d postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # In tests/config.py we read DATABASE_URL from the environment, with a
+      # default that points to the docker-compose service name "db".
+      # In GitHub Actions we connect via localhost on the mapped port.
+      DATABASE_URL: postgresql://superuser:supersecret@localhost:5432/postgres
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package with dev extras
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      - name: Wait for TimescaleDB to be ready
+        run: |
+          for i in {1..10}; do
+            pg_isready -h 127.0.0.1 -p 5432 -U superuser -d postgres && exit 0
+            echo "Waiting for database..."
+            sleep 3
+          done
+          echo "Database did not become ready in time" >&2
+          exit 1
+
+      - name: Run tests
+        run: pytest
+
+  build-and-push-image:
+    needs: tests
+    runs-on: ubuntu-latest
+    # Only push image on main or on tags (e.g. v0.1.0)
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile   # Runtime Dockerfile in repo root
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/timescale-access:latest
+            ghcr.io/${{ github.repository_owner }}/timescale-access:${{ github.ref_name }}

@@ -1,0 +1,66 @@
+# ==============================
+# Python cache / bytecode
+# ==============================
+__pycache__/
+*.py[cod]
+
+# ==============================
+# Virtual environments
+# ==============================
+.venv/
+venv/
+env/
+
+# ==============================
+# Git and VCS
+# ==============================
+.git/
+.gitignore
+
+# ==============================
+# Local configs / sensitive files
+# ==============================
+.env
+*.pem
+*.key
+*.crt
+*.pub
+
+# ==============================
+# Development only
+# ==============================
+.vscode/
+.idea/
+.devcontainer/
+
+# ==============================
+# Build / packaging artifacts
+# ==============================
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+
+# ==============================
+# Notebooks / docs
+# ==============================
+docs/_build/
+site/
+.ipynb_checkpoints/
+
+# ==============================
+# Test cache / reports
+# ==============================
+pytest_cache/
+.tox/
+.nox/
+.hypothesis/
+.coverage*
+coverage.xml
+
+# ==============================
+# Random OS files
+# ==============================
+.DS_Store
+Thumbs.db
