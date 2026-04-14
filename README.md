@@ -30,26 +30,16 @@ Comes with a full development environment (VS Code Devcontainer + TimescaleDB), 
 ## 📦 Project Structure
 
 ```
-src/timescale_access/
-    client.py
-    engine.py
-    read.py
-    write.py
-    analysis.py
-
-tests/
-    test_client.py
-    config.py
-    conftest.py
-
-docs/
-    source/
-    build/
-
-.devcontainer/
-docker-compose.yaml
-Dockerfile
-pyproject.toml
+.
+├── docker-compose.override.yaml
+├── docker-compose.yaml
+├── pyproject.toml
+├── docs/
+├── src/
+│   └── timescale_access/
+├── tests/
+├── CONTRIBUTING.md
+└── README.md
 ```
 
 ---

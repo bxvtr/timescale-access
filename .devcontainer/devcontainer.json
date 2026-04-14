@@ -1,5 +1,5 @@
 {
-  "name": "timescale-access dev + TimescaleDB",
+  "name": "Timescale Access Devcontainer + TimescaleDB",
   "dockerComposeFile": [
     "../docker-compose.yaml",
     "../docker-compose.override.yaml"
