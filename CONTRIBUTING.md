@@ -6,8 +6,6 @@ This project aims to provide a deterministic, reproducible, and production-ready
 interface for working with TimescaleDB and PostgreSQL. Contributions should
 prioritize correctness, explicit behavior, and long-term maintainability.
 
----
-
 ## Design Philosophy
 
 All changes should align with the following principles:
@@ -20,8 +18,6 @@ All changes should align with the following principles:
 
 Avoid introducing non-deterministic logic, magic defaults, or tightly coupled behavior.
 
----
-
 ## Contribution Workflow
 
 1. Fork the repository  
@@ -31,8 +27,6 @@ Avoid introducing non-deterministic logic, magic defaults, or tightly coupled be
 
 Describe the motivation, approach, and any relevant design considerations.
 
----
-
 ## Commit Conventions
 
 Use concise, descriptive messages:
@@ -40,8 +34,6 @@ Use concise, descriptive messages:
 feat: add hypertable conflict handling  
 fix: correct transaction rollback behavior  
 docs: clarify devcontainer setup  
-
----
 
 ## Development Setup
 
@@ -56,13 +48,11 @@ Manual setup:
 pip install -e .[dev]
 ```
 
----
-
 ## Testing Requirements
 
 Before submitting a pull request:
 
-* All tests must pass using `pytest`
-* New functionality should include relevant test coverage
+- All tests must pass using `pytest`
+- New functionality should include relevant test coverage
 
 Contributions without tests may be requested to add coverage before review.
