@@ -1,0 +1,545 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>timescale_access.client &mdash; Timescale Access 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode_css/general.css?v=c0a7eb24" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode_css/dark.css?v=70edf1c7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+      <script src="../../_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Timescale Access
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Timescale Access</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">timescale_access.client</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for timescale_access.client</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
+
+
+<div class="viewcode-block" id="TimescaleAccess">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimescaleAccess</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience wrapper around database operations using SQLAlchemy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a database connection using the ``connection`` module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            db_url (str): Database URL.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_engine</span><span class="p">(</span><span class="n">db_url</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TimescaleAccess.dispose_connection">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.dispose_connection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dispose_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Explicitly dispose the underlying SQLAlchemy engine and free resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.check_connection">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.check_connection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test whether a connection to the database can be established.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the connection check succeeds, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">check_connection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.insert_hypertable">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.insert_hypertable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">insert_hypertable</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+        <span class="n">time_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Insert a pandas DataFrame into a TimescaleDB hypertable.</span>
+
+<span class="sd">        This method is tailored to time-series data. If the target table does not exist,</span>
+<span class="sd">        it is automatically created as a TimescaleDB hypertable. The time column is</span>
+<span class="sd">        set to ``&quot;timestamp&quot;`` by default.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Name of the target schema.</span>
+<span class="sd">            table_name (str): Name of the target table.</span>
+<span class="sd">            df (pd.DataFrame): DataFrame to insert. Must contain a time column.</span>
+<span class="sd">            index (bool, optional): Whether to persist the pandas index (default: False).</span>
+<span class="sd">            chunksize (int, optional): Number of rows per batch insert (default: 500).</span>
+<span class="sd">            time_column (str, optional): Name of the time column in the DataFrame</span>
+<span class="sd">                (default: ``&quot;timestamp&quot;``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the given time column is not present in ``df``.</span>
+<span class="sd">            RuntimeError: If insertion or hypertable creation fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">write</span><span class="o">.</span><span class="n">insert_hypertable</span><span class="p">(</span>
+            <span class="n">engine</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">schema_name</span><span class="o">=</span><span class="n">schema_name</span><span class="p">,</span>
+            <span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+            <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+            <span class="n">time_column</span><span class="o">=</span><span class="n">time_column</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.drop_table">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.drop_table">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Drop a table in the given schema.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Name of the table to drop.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">write</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_existing_timestamps">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_existing_timestamps">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_existing_timestamps</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a sorted list of distinct timestamps from a specific column.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+<span class="sd">            column (str, optional): Column name to query (default: ``&quot;timestamp&quot;``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[datetime]: Sorted list of timestamps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_existing_timestamps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_table_names">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_table_names">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all table names in the given schema.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of table names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_table_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_column_names">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_column_names">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_column_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all column names for a given table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of column names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_column_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_distinct_values">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_distinct_values">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_distinct_values</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all distinct values of a column in a table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+<span class="sd">            column_name (str): Column name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of distinct values in the column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_distinct_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_indexes">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_indexes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all indexes for a given table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[dict]: List of index metadata dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_indexes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_table">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_table">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a table as a pandas DataFrame with optional filters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+<span class="sd">            filters (Optional[Dict[str, Any]], optional): Filter specification for the</span>
+<span class="sd">                WHERE clause.</span>
+<span class="sd">                Examples:</span>
+<span class="sd">                    - Single/multiple values:</span>
+<span class="sd">                      ``{&quot;instrument_name&quot;: [&quot;BTC-14MAR25&quot;, &quot;ETH-14MAR25&quot;]}``</span>
+<span class="sd">                    - Range filter:</span>
+<span class="sd">                      ``{&quot;trade_seq&quot;: {&quot;between&quot;: (100, 200)}}``</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Filtered table contents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_databases">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_databases">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all non-template databases in the PostgreSQL instance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of database names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_databases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_roles">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_roles">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all roles and their privileges.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[dict]: List of role metadata, including superuser and createdb flags.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_roles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_role_memberships">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_role_memberships">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_role_memberships</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all role memberships in the database.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[dict]: List of mappings from member to role.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_role_memberships</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_active_connections">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_active_connections">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_active_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return information about active database connections.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[dict]: List of active connections with database name, user and client IP.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_active_connections</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_schemas">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_schemas">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_schemas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of all user-defined schemas.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of schema names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">read</span><span class="o">.</span><span class="n">get_schemas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.ensure_schema_exists">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.ensure_schema_exists">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_schema_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the given schema if it does not already exist.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Name of the schema to ensure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">write</span><span class="o">.</span><span class="n">ensure_schema_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_missing_trade_seq">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_missing_trade_seq">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_missing_trade_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all expected but missing ``trade_seq`` values per ``instrument_name``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Rows describing missing sequence values per instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_missing_trade_seq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_nonconsecutive_trade_seq">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_nonconsecutive_trade_seq">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_nonconsecutive_trade_seq</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all ``trade_seq`` rows where the sequence is not consecutive.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Rows with gaps in ``trade_seq`` per instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_nonconsecutive_trade_seq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_duplicate_rows">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_duplicate_rows">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_duplicate_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all duplicate rows where ``(instrument_name, trade_seq)`` occurs multiple times.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame containing all duplicate rows.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_duplicate_rows</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_null_summary">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_null_summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_null_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create (if necessary) and invoke a function that summarizes NULL values in a table.</span>
+
+<span class="sd">        The created function is named according to the pattern:</span>
+<span class="sd">        ``check_nulls_in_{schema_name}_{table_name}``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name.</span>
+<span class="sd">            table_name (str): Table name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Summary of NULL counts per column and instrument name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_null_summary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_hypertable_size">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_hypertable_size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_hypertable_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the total size of a TimescaleDB hypertable as a formatted string</span>
+<span class="sd">        (for example ``&quot;123 MB&quot;``).</span>
+
+<span class="sd">        The implementation:</span>
+<span class="sd">        1. Retrieves the internal hypertable ID from ``_timescaledb_catalog.hypertable``.</span>
+<span class="sd">        2. Summarizes the size of all chunks in ``_timescaledb_internal``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name of the hypertable (for example ``&quot;raw_data&quot;``).</span>
+<span class="sd">            table_name (str): Hypertable name (for example ``&quot;btc_weekly&quot;``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Total size formatted by ``pg_size_pretty`` (for example ``&quot;512 MB&quot;``, ``&quot;3 GB&quot;``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the hypertable cannot be found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_hypertable_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.get_row_count">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.get_row_count">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_row_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of rows in a table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Schema name (for example ``&quot;raw_data&quot;``).</span>
+<span class="sd">            table_name (str): Table name (for example ``&quot;btc_weekly&quot;``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Number of rows in the table.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_row_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimescaleAccess.insert_hypertable_on_conflict">
+<a class="viewcode-back" href="../../api.html#timescale_access.client.TimescaleAccess.insert_hypertable_on_conflict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">insert_hypertable_on_conflict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">time_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Insert a DataFrame into a TimescaleDB hypertable and avoid duplicates via</span>
+<span class="sd">        ``ON CONFLICT``.</span>
+
+<span class="sd">        The function creates the table and columns as needed and ensures a UNIQUE index on</span>
+<span class="sd">        ``(instrument_name, trade_seq, timestamp)``. All index columns must be present in</span>
+<span class="sd">        the DataFrame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            schema_name (str): Target schema.</span>
+<span class="sd">            table_name (str): Target table name.</span>
+<span class="sd">            df (pd.DataFrame): Data to insert.</span>
+<span class="sd">            time_column (str): Name of the time column used by TimescaleDB.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">analysis</span><span class="o">.</span><span class="n">insert_hypertable_on_conflict</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">schema_name</span><span class="p">,</span>
+            <span class="n">table_name</span><span class="p">,</span>
+            <span class="n">df</span><span class="p">,</span>
+            <span class="n">time_column</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, bxvtr.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

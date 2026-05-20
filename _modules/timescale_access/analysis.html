@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>timescale_access.analysis &mdash; Timescale Access 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode_css/general.css?v=c0a7eb24" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode_css/dark.css?v=70edf1c7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+      <script src="../../_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Timescale Access
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Timescale Access</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">timescale_access.analysis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for timescale_access.analysis</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetaData</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">text</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.dialects.postgresql</span><span class="w"> </span><span class="kn">import</span> <span class="n">insert</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
+
+
+<div class="viewcode-block" id="get_missing_trade_seq">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.get_missing_trade_seq">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_missing_trade_seq</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all expected but missing ``trade_seq`` values per ``instrument_name``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Missing sequence values per instrument.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        WITH seq_range AS (</span>
+<span class="s2">            SELECT DISTINCT instrument_name,</span>
+<span class="s2">                   MIN(trade_seq) AS min_seq,</span>
+<span class="s2">                   MAX(trade_seq) AS max_seq</span>
+<span class="s2">            FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">            GROUP BY instrument_name</span>
+<span class="s2">        ),</span>
+<span class="s2">        all_numbers AS (</span>
+<span class="s2">            SELECT instrument_name, generate_series(min_seq, max_seq) AS expected_seq</span>
+<span class="s2">            FROM seq_range</span>
+<span class="s2">        ),</span>
+<span class="s2">        actual_numbers AS (</span>
+<span class="s2">            SELECT DISTINCT instrument_name, trade_seq</span>
+<span class="s2">            FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">        )</span>
+<span class="s2">        SELECT a.instrument_name, a.expected_seq</span>
+<span class="s2">        FROM all_numbers a</span>
+<span class="s2">        LEFT JOIN actual_numbers b</span>
+<span class="s2">          ON a.instrument_name = b.instrument_name</span>
+<span class="s2">         AND a.expected_seq = b.trade_seq</span>
+<span class="s2">        WHERE b.trade_seq IS NULL;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_nonconsecutive_trade_seq">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.get_nonconsecutive_trade_seq">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_nonconsecutive_trade_seq</span><span class="p">(</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span>
+    <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all ``trade_seq`` rows where the sequence is not consecutive.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Rows with gaps in ``trade_seq`` per instrument.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        WITH diffs AS (</span>
+<span class="s2">            SELECT</span>
+<span class="s2">                instrument_name,</span>
+<span class="s2">                trade_seq,</span>
+<span class="s2">                LAG(trade_seq) OVER (</span>
+<span class="s2">                    PARTITION BY instrument_name</span>
+<span class="s2">                    ORDER BY trade_seq</span>
+<span class="s2">                ) AS previous_seq</span>
+<span class="s2">            FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">            WHERE trade_seq IS NOT NULL</span>
+<span class="s2">        )</span>
+<span class="s2">        SELECT *,</span>
+<span class="s2">               trade_seq - previous_seq AS diff</span>
+<span class="s2">        FROM diffs</span>
+<span class="s2">        WHERE trade_seq - previous_seq != 1;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_duplicate_rows">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.get_duplicate_rows">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_duplicate_rows</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all rows where the combination (instrument_name, trade_seq) occurs multiple times.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: DataFrame containing all duplicate rows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT *</span>
+<span class="s2">        FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">        WHERE (instrument_name, trade_seq) IN (</span>
+<span class="s2">            SELECT instrument_name, trade_seq</span>
+<span class="s2">            FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">            GROUP BY instrument_name, trade_seq</span>
+<span class="s2">            HAVING COUNT(*) &gt; 1</span>
+<span class="s2">        )</span>
+<span class="s2">        ORDER BY instrument_name, trade_seq;</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_null_summary">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.get_null_summary">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_null_summary</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create (if necessary) and call a function that summarizes NULL values for any</span>
+<span class="sd">    table in a schema.</span>
+
+<span class="sd">    The function name is generated using the pattern:</span>
+<span class="sd">    ``check_nulls_in_{schema_name}_{table_name}``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Summary of NULL counts per column and instrument name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;check_nulls_in_</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="n">check_fn_query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        SELECT EXISTS (</span>
+<span class="sd">            SELECT 1</span>
+<span class="sd">            FROM pg_proc</span>
+<span class="sd">            WHERE proname = :func_name</span>
+<span class="sd">        );</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">create_fn_sql</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CREATE OR REPLACE FUNCTION </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">()</span>
+<span class="s2">        RETURNS TABLE(instrument_name text, column_name text, null_count bigint)</span>
+<span class="s2">        LANGUAGE plpgsql AS</span>
+<span class="s2">        $$</span>
+<span class="s2">        DECLARE</span>
+<span class="s2">            col record;</span>
+<span class="s2">            dyn_sql text;</span>
+<span class="s2">        BEGIN</span>
+<span class="s2">            FOR col IN</span>
+<span class="s2">                SELECT c.column_name</span>
+<span class="s2">                FROM information_schema.columns c</span>
+<span class="s2">                WHERE c.table_schema = &#39;</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">                  AND c.table_name = &#39;</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">                  AND c.column_name != &#39;instrument_name&#39;</span>
+<span class="s2">            LOOP</span>
+<span class="s2">                dyn_sql := format(</span>
+<span class="s2">                    &#39;SELECT instrument_name, %L AS column_name, COUNT(*) AS null_count</span>
+<span class="s2">                     FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">                     WHERE %I IS NULL</span>
+<span class="s2">                     GROUP BY instrument_name</span>
+<span class="s2">                     HAVING COUNT(*) &gt; 0&#39;,</span>
+<span class="s2">                    col.column_name, col.column_name</span>
+<span class="s2">                );</span>
+
+<span class="s2">                RETURN QUERY EXECUTE dyn_sql;</span>
+<span class="s2">            END LOOP;</span>
+<span class="s2">        END;</span>
+<span class="s2">        $$;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">exists</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">check_fn_query</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;func_name&quot;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">})</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">create_fn_sql</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECT * FROM </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">();&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fetchall</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="get_hypertable_size">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.get_hypertable_size">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_hypertable_size</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the total size of a TimescaleDB hypertable as a formatted string</span>
+<span class="sd">    (for example ``&quot;123 MB&quot;``).</span>
+
+<span class="sd">    The implementation:</span>
+<span class="sd">    1. Retrieves the internal hypertable ID from ``_timescaledb_catalog.hypertable``.</span>
+<span class="sd">    2. Summarizes the size of all chunks in ``_timescaledb_internal``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name, e.g. ``&quot;raw_data&quot;``.</span>
+<span class="sd">        table_name (str): Hypertable name, e.g. ``&quot;btc_weekly&quot;``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Total formatted size (for example ``&quot;512 MB&quot;``, ``&quot;3 GB&quot;``).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the hypertable cannot be found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">get_id_sql</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        SELECT id</span>
+<span class="sd">        FROM _timescaledb_catalog.hypertable</span>
+<span class="sd">        WHERE schema_name = :schema_name AND table_name = :table_name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">get_id_sql</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;schema_name&quot;</span><span class="p">:</span> <span class="n">schema_name</span><span class="p">,</span> <span class="s2">&quot;table_name&quot;</span><span class="p">:</span> <span class="n">table_name</span><span class="p">},</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hypertable &#39;</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span>
+        <span class="n">hypertable_id</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">get_size_sql</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT pg_size_pretty(SUM(pg_total_relation_size(c.oid))) AS total_size</span>
+<span class="s2">        FROM pg_class c</span>
+<span class="s2">        JOIN pg_namespace n ON n.oid = c.relnamespace</span>
+<span class="s2">        WHERE n.nspname = &#39;_timescaledb_internal&#39;</span>
+<span class="s2">          AND c.relname LIKE &#39;_hyper_</span><span class="si">{</span><span class="n">hypertable_id</span><span class="si">}</span><span class="s2">_%%_chunk&#39;;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">get_size_sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">result</span> <span class="k">else</span> <span class="s2">&quot;0 bytes&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="get_row_count">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.get_row_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_row_count</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the number of rows in a table.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name (for example ``&quot;raw_data&quot;``).</span>
+<span class="sd">        table_name (str): Table name (for example ``&quot;btc_weekly&quot;``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Number of rows in the table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECT COUNT(*) FROM </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span></div>
+
+
+
+<div class="viewcode-block" id="insert_hypertable_on_conflict">
+<a class="viewcode-back" href="../../api.html#timescale_access.analysis.insert_hypertable_on_conflict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">insert_hypertable_on_conflict</span><span class="p">(</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span>
+    <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">time_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Insert a DataFrame into a TimescaleDB hypertable and avoid duplicates via</span>
+<span class="sd">    ``ON CONFLICT``.</span>
+
+<span class="sd">    The function creates the table and columns as needed and ensures a UNIQUE</span>
+<span class="sd">    index on ``(instrument_name, trade_seq, timestamp)``. All index columns must</span>
+<span class="sd">    be present as columns in the DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Target schema.</span>
+<span class="sd">        table_name (str): Target table name.</span>
+<span class="sd">        df (pd.DataFrame): Data to insert.</span>
+<span class="sd">        time_column (str): Time column for TimescaleDB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No data to insert.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="c1"># Ensure table exists</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT EXISTS (</span>
+<span class="sd">                SELECT 1 FROM information_schema.tables</span>
+<span class="sd">                WHERE table_schema = :schema_name AND table_name = :table_name</span>
+<span class="sd">            );</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">),</span>
+            <span class="p">{</span><span class="s2">&quot;schema_name&quot;</span><span class="p">:</span> <span class="n">schema_name</span><span class="p">,</span> <span class="s2">&quot;table_name&quot;</span><span class="p">:</span> <span class="n">table_name</span><span class="p">},</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">cols_sql</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_integer_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;BIGINT&quot;</span>
+                <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_float_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;NUMERIC&quot;</span>
+                <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;TIMESTAMP&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;TEXT&quot;</span>
+                <span class="n">cols_sql</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">sql_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">text</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                CREATE TABLE </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2"> (</span>
+<span class="s2">                    </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cols_sql</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">                );</span>
+<span class="s2">                &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Add missing columns</span>
+        <span class="n">existing_cols_result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT column_name</span>
+<span class="sd">            FROM information_schema.columns</span>
+<span class="sd">            WHERE table_schema = :schema_name AND table_name = :table_name;</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">),</span>
+            <span class="p">{</span><span class="s2">&quot;schema_name&quot;</span><span class="p">:</span> <span class="n">schema_name</span><span class="p">,</span> <span class="s2">&quot;table_name&quot;</span><span class="p">:</span> <span class="n">table_name</span><span class="p">},</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="n">existing_cols</span> <span class="o">=</span> <span class="p">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">existing_cols_result</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing_cols</span><span class="p">:</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_integer_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;BIGINT&quot;</span>
+                <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_float_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;NUMERIC&quot;</span>
+                <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;TIMESTAMP&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sql_type</span> <span class="o">=</span> <span class="s2">&quot;TEXT&quot;</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                    <span class="n">text</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    ALTER TABLE </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">                    ADD COLUMN </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">sql_type</span><span class="si">}</span><span class="s2">;</span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Ensure UNIQUE index</span>
+        <span class="n">index_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;unique_</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">_instrument_seq_ts&quot;</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            DO $$</span>
+<span class="s2">            BEGIN</span>
+<span class="s2">                IF NOT EXISTS (</span>
+<span class="s2">                    SELECT 1</span>
+<span class="s2">                    FROM pg_class c</span>
+<span class="s2">                    JOIN pg_namespace n ON n.oid = c.relnamespace</span>
+<span class="s2">                    WHERE c.relname = :index_name</span>
+<span class="s2">                      AND n.nspname = :schema_name</span>
+<span class="s2">                ) THEN</span>
+<span class="s2">                    EXECUTE &#39;CREATE UNIQUE INDEX </span><span class="si">{</span><span class="n">index_name</span><span class="si">}</span>
+<span class="s2">                             ON </span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span>
+<span class="s2">                             (instrument_name, trade_seq, </span><span class="si">{</span><span class="n">time_column</span><span class="si">}</span><span class="s2">)&#39;;</span>
+<span class="s2">                END IF;</span>
+<span class="s2">            END$$;</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="p">),</span>
+            <span class="p">{</span><span class="s2">&quot;schema_name&quot;</span><span class="p">:</span> <span class="n">schema_name</span><span class="p">,</span> <span class="s2">&quot;index_name&quot;</span><span class="p">:</span> <span class="n">index_name</span><span class="p">},</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Insert with ON CONFLICT DO NOTHING</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">MetaData</span><span class="p">()</span>
+    <span class="n">table_obj</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">autoload_with</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema_name</span><span class="p">)</span>
+    <span class="n">records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+            <span class="n">stmt</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">table_obj</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="o">**</span><span class="n">record</span><span class="p">)</span>
+            <span class="n">stmt</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="n">on_conflict_do_nothing</span><span class="p">(</span>
+                <span class="n">index_elements</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">,</span> <span class="s2">&quot;trade_seq&quot;</span><span class="p">,</span> <span class="n">time_column</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+
+        <span class="c1"># Ensure hypertable</span>
+        <span class="n">hypertable_exists</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT 1</span>
+<span class="sd">            FROM timescaledb_information.hypertables</span>
+<span class="sd">            WHERE hypertable_schema = :schema_name</span>
+<span class="sd">              AND hypertable_name = :table_name;</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">),</span>
+            <span class="p">{</span><span class="s2">&quot;schema_name&quot;</span><span class="p">:</span> <span class="n">schema_name</span><span class="p">,</span> <span class="s2">&quot;table_name&quot;</span><span class="p">:</span> <span class="n">table_name</span><span class="p">},</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hypertable_exists</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">text</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                SELECT create_hypertable(</span>
+<span class="s2">                    &#39;</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;::regclass,</span>
+<span class="s2">                    &#39;</span><span class="si">{</span><span class="n">time_column</span><span class="si">}</span><span class="s2">&#39;,</span>
+<span class="s2">                    migrate_data =&gt; TRUE,</span>
+<span class="s2">                    if_not_exists =&gt; TRUE</span>
+<span class="s2">                );</span>
+<span class="s2">                &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, bxvtr.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

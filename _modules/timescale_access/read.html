@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>timescale_access.read &mdash; Timescale Access 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode_css/general.css?v=c0a7eb24" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode_css/dark.css?v=70edf1c7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+      <script src="../../_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Timescale Access
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Timescale Access</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">timescale_access.read</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for timescale_access.read</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">inspect</span><span class="p">,</span> <span class="n">text</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
+
+
+<div class="viewcode-block" id="get_existing_timestamps">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_existing_timestamps">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_existing_timestamps</span><span class="p">(</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span>
+    <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a sorted list of distinct timestamps from a given column.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+<span class="sd">        column (str): Column name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[datetime]: Sorted list of timestamps.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">full_table</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECT DISTINCT </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> FROM </span><span class="si">{</span><span class="n">full_table</span><span class="si">}</span><span class="s2"> ORDER BY </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_table_names">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_table_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_table_names</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all table names in a given schema.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[str]: List of table names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">inspect</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span><span class="o">.</span><span class="n">get_table_names</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_column_names">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_column_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_column_names</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all column names of a given table.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[str]: List of column names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inspector</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">inspector</span><span class="o">.</span><span class="n">get_columns</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="get_distinct_values">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_distinct_values">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_distinct_values</span><span class="p">(</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span>
+    <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all distinct, non-null values of a column in a table.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+<span class="sd">        column_name (str): Column name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[str]: List of distinct values in the column.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT DISTINCT &quot;</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">        FROM &quot;</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">&quot;.&quot;</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">        WHERE &quot;</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">&quot; IS NOT NULL</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_indexes">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_indexes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_indexes</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return index information for a given table.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[dict]: List of index metadata dictionaries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inspector</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inspector</span><span class="o">.</span><span class="n">get_indexes</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_table">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_table">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_table</span><span class="p">(</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">,</span>
+    <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a table as a pandas DataFrame with optional filter conditions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+<span class="sd">        schema_name (str): Schema name.</span>
+<span class="sd">        table_name (str): Table name.</span>
+<span class="sd">        filters (Optional[Dict[str, Union[Any, Dict[str, Any]]]], optional):</span>
+<span class="sd">            Filter specification for the WHERE clause.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                - Single/multiple values:</span>
+<span class="sd">                  ``{&quot;instrument_name&quot;: [&quot;BTC-14MAR25&quot;, &quot;ETH-14MAR25&quot;]}``</span>
+<span class="sd">                - Range filter:</span>
+<span class="sd">                  ``{&quot;trade_seq&quot;: {&quot;between&quot;: (100, 200)}}``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Filtered table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">full_table</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">schema_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">base_query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT * FROM </span><span class="si">{</span><span class="n">full_table</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">filters</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Range filter</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;between&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;between&quot;</span><span class="p">]</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> BETWEEN </span><span class="si">{</span><span class="n">low</span><span class="si">}</span><span class="s2"> AND </span><span class="si">{</span><span class="n">high</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Multiple values (IN)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
+                <span class="n">value_list</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span>
+                <span class="p">)</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> IN (</span><span class="si">{</span><span class="n">value_list</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="c1"># Single equality</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">where_clause</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; WHERE </span><span class="si">{</span><span class="s1">&#39; AND &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">conditions</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">base_query</span> <span class="o">+</span> <span class="n">where_clause</span> <span class="o">+</span> <span class="s2">&quot; ORDER BY trade_seq&quot;</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_databases">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_databases">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_databases</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all non-template databases in the PostgreSQL instance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[str]: List of database names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT datname FROM pg_database WHERE datistemplate = false;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_roles">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_roles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_roles</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all roles and their basic privileges.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[dict]: List of dictionaries with role metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT rolname, rolsuper, rolcreaterole, rolcreatedb</span>
+<span class="sd">            FROM pg_roles;</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_role_memberships">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_role_memberships">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_role_memberships</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all role memberships in the database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[dict]: List of mappings from member to role.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT</span>
+<span class="sd">                r.rolname AS role_name,</span>
+<span class="sd">                m.rolname AS member_name</span>
+<span class="sd">            FROM pg_auth_members am</span>
+<span class="sd">            JOIN pg_roles r ON r.oid = am.roleid</span>
+<span class="sd">            JOIN pg_roles m ON m.oid = am.member;</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_active_connections">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_active_connections">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_active_connections</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return information about active database connections.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[dict]: List of active connections with database name, user and client IP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT datname, usename, client_addr FROM pg_stat_activity;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_schemas">
+<a class="viewcode-back" href="../../api.html#timescale_access.read.get_schemas">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_schemas</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of user-defined schemas, excluding system and TimescaleDB internals.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (Engine): SQLAlchemy engine.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[str]: List of schema names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ignored_schemas</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;pg_catalog&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;information_schema&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pg_toast&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timescaledb_information&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timescaledb_experimental&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timescaledb_internal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timescaledb_functions&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timescaledb_debug&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timescaledb_config&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timescaledb_catalog&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timescaledb_cache&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        SELECT schema_name</span>
+<span class="sd">        FROM information_schema.schemata</span>
+<span class="sd">        WHERE schema_name NOT IN :ignored;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ignored&quot;</span><span class="p">:</span> <span class="n">ignored_schemas</span><span class="p">})</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, bxvtr.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

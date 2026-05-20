@@ -1,0 +1,1102 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; Timescale Access 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/dark_mode_css/general.css?v=c0a7eb24" />
+      <link rel="stylesheet" type="text/css" href="_static/dark_mode_css/dark.css?v=70edf1c7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+      <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Timescale Access
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-timescale_access.client">Client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.client.TimescaleAccess"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.check_connection"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.check_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.dispose_connection"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.dispose_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.drop_table"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.drop_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.ensure_schema_exists"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.ensure_schema_exists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_active_connections"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_active_connections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_column_names"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_column_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_databases"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_databases()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_distinct_values"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_distinct_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_duplicate_rows"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_duplicate_rows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_existing_timestamps"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_existing_timestamps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_hypertable_size"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_hypertable_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_indexes"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_indexes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_missing_trade_seq"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_missing_trade_seq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_nonconsecutive_trade_seq"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_nonconsecutive_trade_seq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_null_summary"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_null_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_role_memberships"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_role_memberships()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_roles"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_roles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_row_count"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_row_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_schemas"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_schemas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_table"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.get_table_names"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.get_table_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.insert_hypertable"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.insert_hypertable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timescale_access.client.TimescaleAccess.insert_hypertable_on_conflict"><code class="docutils literal notranslate"><span class="pre">TimescaleAccess.insert_hypertable_on_conflict()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-timescale_access.engine">Low-level modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.engine.check_connection"><code class="docutils literal notranslate"><span class="pre">check_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.engine.get_engine"><code class="docutils literal notranslate"><span class="pre">get_engine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_active_connections"><code class="docutils literal notranslate"><span class="pre">get_active_connections()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_column_names"><code class="docutils literal notranslate"><span class="pre">get_column_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_databases"><code class="docutils literal notranslate"><span class="pre">get_databases()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_distinct_values"><code class="docutils literal notranslate"><span class="pre">get_distinct_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_existing_timestamps"><code class="docutils literal notranslate"><span class="pre">get_existing_timestamps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_indexes"><code class="docutils literal notranslate"><span class="pre">get_indexes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_role_memberships"><code class="docutils literal notranslate"><span class="pre">get_role_memberships()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_roles"><code class="docutils literal notranslate"><span class="pre">get_roles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_schemas"><code class="docutils literal notranslate"><span class="pre">get_schemas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_table"><code class="docutils literal notranslate"><span class="pre">get_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.read.get_table_names"><code class="docutils literal notranslate"><span class="pre">get_table_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.write.drop_table"><code class="docutils literal notranslate"><span class="pre">drop_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.write.ensure_schema_exists"><code class="docutils literal notranslate"><span class="pre">ensure_schema_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.write.insert_hypertable"><code class="docutils literal notranslate"><span class="pre">insert_hypertable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.get_duplicate_rows"><code class="docutils literal notranslate"><span class="pre">get_duplicate_rows()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.get_hypertable_size"><code class="docutils literal notranslate"><span class="pre">get_hypertable_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.get_missing_trade_seq"><code class="docutils literal notranslate"><span class="pre">get_missing_trade_seq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.get_nonconsecutive_trade_seq"><code class="docutils literal notranslate"><span class="pre">get_nonconsecutive_trade_seq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.get_null_summary"><code class="docutils literal notranslate"><span class="pre">get_null_summary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.get_row_count"><code class="docutils literal notranslate"><span class="pre">get_row_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timescale_access.analysis.insert_hypertable_on_conflict"><code class="docutils literal notranslate"><span class="pre">insert_hypertable_on_conflict()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Timescale Access</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<section id="module-timescale_access.client">
+<span id="client"></span><h2>Client<a class="headerlink" href="#module-timescale_access.client" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">timescale_access.client.</span></span><span class="sig-name descname"><span class="pre">TimescaleAccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Convenience wrapper around database operations using SQLAlchemy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>db_url</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.check_connection">
+<span class="sig-name descname"><span class="pre">check_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.check_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.check_connection" title="Link to this definition"></a></dt>
+<dd><p>Test whether a connection to the database can be established.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the connection check succeeds, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.dispose_connection">
+<span class="sig-name descname"><span class="pre">dispose_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.dispose_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.dispose_connection" title="Link to this definition"></a></dt>
+<dd><p>Explicitly dispose the underlying SQLAlchemy engine and free resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.drop_table">
+<span class="sig-name descname"><span class="pre">drop_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.drop_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.drop_table" title="Link to this definition"></a></dt>
+<dd><p>Drop a table in the given schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Name of the table to drop.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.ensure_schema_exists">
+<span class="sig-name descname"><span class="pre">ensure_schema_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.ensure_schema_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.ensure_schema_exists" title="Link to this definition"></a></dt>
+<dd><p>Create the given schema if it does not already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>schema_name</strong> (<em>str</em>) – Name of the schema to ensure.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_active_connections">
+<span class="sig-name descname"><span class="pre">get_active_connections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_active_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_active_connections" title="Link to this definition"></a></dt>
+<dd><p>Return information about active database connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of active connections with database name, user and client IP.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_column_names">
+<span class="sig-name descname"><span class="pre">get_column_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_column_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_column_names" title="Link to this definition"></a></dt>
+<dd><p>Return all column names for a given table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of column names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_databases">
+<span class="sig-name descname"><span class="pre">get_databases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_databases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_databases" title="Link to this definition"></a></dt>
+<dd><p>Return all non-template databases in the PostgreSQL instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of database names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_distinct_values">
+<span class="sig-name descname"><span class="pre">get_distinct_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_distinct_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_distinct_values" title="Link to this definition"></a></dt>
+<dd><p>Return all distinct values of a column in a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+<li><p><strong>column_name</strong> (<em>str</em>) – Column name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of distinct values in the column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_duplicate_rows">
+<span class="sig-name descname"><span class="pre">get_duplicate_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_duplicate_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_duplicate_rows" title="Link to this definition"></a></dt>
+<dd><p>Return all duplicate rows where <code class="docutils literal notranslate"><span class="pre">(instrument_name,</span> <span class="pre">trade_seq)</span></code> occurs multiple times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing all duplicate rows.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_existing_timestamps">
+<span class="sig-name descname"><span class="pre">get_existing_timestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'timestamp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_existing_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_existing_timestamps" title="Link to this definition"></a></dt>
+<dd><p>Return a sorted list of distinct timestamps from a specific column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+<li><p><strong>column</strong> (<em>str</em><em>, </em><em>optional</em>) – Column name to query (default: <code class="docutils literal notranslate"><span class="pre">&quot;timestamp&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sorted list of timestamps.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[datetime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_hypertable_size">
+<span class="sig-name descname"><span class="pre">get_hypertable_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_hypertable_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_hypertable_size" title="Link to this definition"></a></dt>
+<dd><p>Return the total size of a TimescaleDB hypertable as a formatted string
+(for example <code class="docutils literal notranslate"><span class="pre">&quot;123</span> <span class="pre">MB&quot;</span></code>).</p>
+<p>The implementation:
+1. Retrieves the internal hypertable ID from <code class="docutils literal notranslate"><span class="pre">_timescaledb_catalog.hypertable</span></code>.
+2. Summarizes the size of all chunks in <code class="docutils literal notranslate"><span class="pre">_timescaledb_internal</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name of the hypertable (for example <code class="docutils literal notranslate"><span class="pre">&quot;raw_data&quot;</span></code>).</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Hypertable name (for example <code class="docutils literal notranslate"><span class="pre">&quot;btc_weekly&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total size formatted by <code class="docutils literal notranslate"><span class="pre">pg_size_pretty</span></code> (for example <code class="docutils literal notranslate"><span class="pre">&quot;512</span> <span class="pre">MB&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;3</span> <span class="pre">GB&quot;</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the hypertable cannot be found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_indexes">
+<span class="sig-name descname"><span class="pre">get_indexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_indexes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_indexes" title="Link to this definition"></a></dt>
+<dd><p>Return all indexes for a given table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of index metadata dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_missing_trade_seq">
+<span class="sig-name descname"><span class="pre">get_missing_trade_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_missing_trade_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_missing_trade_seq" title="Link to this definition"></a></dt>
+<dd><p>Return all expected but missing <code class="docutils literal notranslate"><span class="pre">trade_seq</span></code> values per <code class="docutils literal notranslate"><span class="pre">instrument_name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rows describing missing sequence values per instrument.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_nonconsecutive_trade_seq">
+<span class="sig-name descname"><span class="pre">get_nonconsecutive_trade_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_nonconsecutive_trade_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_nonconsecutive_trade_seq" title="Link to this definition"></a></dt>
+<dd><p>Return all <code class="docutils literal notranslate"><span class="pre">trade_seq</span></code> rows where the sequence is not consecutive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rows with gaps in <code class="docutils literal notranslate"><span class="pre">trade_seq</span></code> per instrument.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_null_summary">
+<span class="sig-name descname"><span class="pre">get_null_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_null_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_null_summary" title="Link to this definition"></a></dt>
+<dd><p>Create (if necessary) and invoke a function that summarizes NULL values in a table.</p>
+<p>The created function is named according to the pattern:
+<code class="docutils literal notranslate"><span class="pre">check_nulls_in_{schema_name}_{table_name}</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Summary of NULL counts per column and instrument name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_role_memberships">
+<span class="sig-name descname"><span class="pre">get_role_memberships</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_role_memberships"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_role_memberships" title="Link to this definition"></a></dt>
+<dd><p>Return all role memberships in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of mappings from member to role.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_roles">
+<span class="sig-name descname"><span class="pre">get_roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_roles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_roles" title="Link to this definition"></a></dt>
+<dd><p>Return all roles and their privileges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of role metadata, including superuser and createdb flags.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_row_count">
+<span class="sig-name descname"><span class="pre">get_row_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_row_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_row_count" title="Link to this definition"></a></dt>
+<dd><p>Return the number of rows in a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name (for example <code class="docutils literal notranslate"><span class="pre">&quot;raw_data&quot;</span></code>).</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name (for example <code class="docutils literal notranslate"><span class="pre">&quot;btc_weekly&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of rows in the table.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_schemas">
+<span class="sig-name descname"><span class="pre">get_schemas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_schemas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_schemas" title="Link to this definition"></a></dt>
+<dd><p>Return a list of all user-defined schemas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of schema names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_table">
+<span class="sig-name descname"><span class="pre">get_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_table" title="Link to this definition"></a></dt>
+<dd><p>Load a table as a pandas DataFrame with optional filters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+<li><p><strong>filters</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – <p>Filter specification for the
+WHERE clause.
+.. rubric:: Examples</p>
+<ul>
+<li><p>Single/multiple values:
+<code class="docutils literal notranslate"><span class="pre">{&quot;instrument_name&quot;:</span> <span class="pre">[&quot;BTC-14MAR25&quot;,</span> <span class="pre">&quot;ETH-14MAR25&quot;]}</span></code></p></li>
+<li><p>Range filter:
+<code class="docutils literal notranslate"><span class="pre">{&quot;trade_seq&quot;:</span> <span class="pre">{&quot;between&quot;:</span> <span class="pre">(100,</span> <span class="pre">200)}}</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Filtered table contents.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.get_table_names">
+<span class="sig-name descname"><span class="pre">get_table_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.get_table_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.get_table_names" title="Link to this definition"></a></dt>
+<dd><p>Return all table names in the given schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of table names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.insert_hypertable">
+<span class="sig-name descname"><span class="pre">insert_hypertable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'timestamp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.insert_hypertable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.insert_hypertable" title="Link to this definition"></a></dt>
+<dd><p>Insert a pandas DataFrame into a TimescaleDB hypertable.</p>
+<p>This method is tailored to time-series data. If the target table does not exist,
+it is automatically created as a TimescaleDB hypertable. The time column is
+set to <code class="docutils literal notranslate"><span class="pre">&quot;timestamp&quot;</span></code> by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Name of the target schema.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Name of the target table.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame to insert. Must contain a time column.</p></li>
+<li><p><strong>index</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to persist the pandas index (default: False).</p></li>
+<li><p><strong>chunksize</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows per batch insert (default: 500).</p></li>
+<li><p><strong>time_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the time column in the DataFrame
+(default: <code class="docutils literal notranslate"><span class="pre">&quot;timestamp&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the given time column is not present in <code class="docutils literal notranslate"><span class="pre">df</span></code>.</p></li>
+<li><p><strong>RuntimeError</strong> – If insertion or hypertable creation fails.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="timescale_access.client.TimescaleAccess.insert_hypertable_on_conflict">
+<span class="sig-name descname"><span class="pre">insert_hypertable_on_conflict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'timestamp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/client.html#TimescaleAccess.insert_hypertable_on_conflict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.client.TimescaleAccess.insert_hypertable_on_conflict" title="Link to this definition"></a></dt>
+<dd><p>Insert a DataFrame into a TimescaleDB hypertable and avoid duplicates via
+<code class="docutils literal notranslate"><span class="pre">ON</span> <span class="pre">CONFLICT</span></code>.</p>
+<p>The function creates the table and columns as needed and ensures a UNIQUE index on
+<code class="docutils literal notranslate"><span class="pre">(instrument_name,</span> <span class="pre">trade_seq,</span> <span class="pre">timestamp)</span></code>. All index columns must be present in
+the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema_name</strong> (<em>str</em>) – Target schema.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Target table name.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Data to insert.</p></li>
+<li><p><strong>time_column</strong> (<em>str</em>) – Name of the time column used by TimescaleDB.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-timescale_access.engine">
+<span id="low-level-modules"></span><h2>Low-level modules<a class="headerlink" href="#module-timescale_access.engine" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.engine.check_connection">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.engine.</span></span><span class="sig-name descname"><span class="pre">check_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/engine.html#check_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.engine.check_connection" title="Link to this definition"></a></dt>
+<dd><p>Test whether a connection to the database can be established.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine to test.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the connection test succeeds, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.engine.get_engine">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.engine.</span></span><span class="sig-name descname"><span class="pre">get_engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/engine.html#get_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.engine.get_engine" title="Link to this definition"></a></dt>
+<dd><p>Create a SQLAlchemy Engine for the given database URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>db_url</strong> (<em>str</em>) – Database URL.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SQLAlchemy engine instance used for database connections.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Engine</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-timescale_access.read">
+<dt class="sig sig-object py" id="timescale_access.read.get_active_connections">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_active_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_active_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_active_connections" title="Link to this definition"></a></dt>
+<dd><p>Return information about active database connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of active connections with database name, user and client IP.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_column_names">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_column_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_column_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_column_names" title="Link to this definition"></a></dt>
+<dd><p>Return all column names of a given table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of column names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_databases">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_databases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_databases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_databases" title="Link to this definition"></a></dt>
+<dd><p>Return all non-template databases in the PostgreSQL instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of database names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_distinct_values">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_distinct_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_distinct_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_distinct_values" title="Link to this definition"></a></dt>
+<dd><p>Return all distinct, non-null values of a column in a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+<li><p><strong>column_name</strong> (<em>str</em>) – Column name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of distinct values in the column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_existing_timestamps">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_existing_timestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_existing_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_existing_timestamps" title="Link to this definition"></a></dt>
+<dd><p>Return a sorted list of distinct timestamps from a given column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+<li><p><strong>column</strong> (<em>str</em>) – Column name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sorted list of timestamps.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[datetime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_indexes">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_indexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_indexes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_indexes" title="Link to this definition"></a></dt>
+<dd><p>Return index information for a given table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of index metadata dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_role_memberships">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_role_memberships</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_role_memberships"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_role_memberships" title="Link to this definition"></a></dt>
+<dd><p>Return all role memberships in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of mappings from member to role.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_roles">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_roles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_roles" title="Link to this definition"></a></dt>
+<dd><p>Return all roles and their basic privileges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of dictionaries with role metadata.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_schemas">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_schemas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_schemas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_schemas" title="Link to this definition"></a></dt>
+<dd><p>Return a list of user-defined schemas, excluding system and TimescaleDB internals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of schema names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_table">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_table" title="Link to this definition"></a></dt>
+<dd><p>Load a table as a pandas DataFrame with optional filter conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+<li><p><strong>filters</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>Any</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – <p>Filter specification for the WHERE clause.</p>
+<p class="rubric">Examples</p>
+<ul>
+<li><p>Single/multiple values:
+<code class="docutils literal notranslate"><span class="pre">{&quot;instrument_name&quot;:</span> <span class="pre">[&quot;BTC-14MAR25&quot;,</span> <span class="pre">&quot;ETH-14MAR25&quot;]}</span></code></p></li>
+<li><p>Range filter:
+<code class="docutils literal notranslate"><span class="pre">{&quot;trade_seq&quot;:</span> <span class="pre">{&quot;between&quot;:</span> <span class="pre">(100,</span> <span class="pre">200)}}</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Filtered table.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.read.get_table_names">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.read.</span></span><span class="sig-name descname"><span class="pre">get_table_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/read.html#get_table_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.read.get_table_names" title="Link to this definition"></a></dt>
+<dd><p>Return all table names in a given schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of table names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-timescale_access.write">
+<dt class="sig sig-object py" id="timescale_access.write.drop_table">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.write.</span></span><span class="sig-name descname"><span class="pre">drop_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/write.html#drop_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.write.drop_table" title="Link to this definition"></a></dt>
+<dd><p>Drop a table in the given schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Target table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.write.ensure_schema_exists">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.write.</span></span><span class="sig-name descname"><span class="pre">ensure_schema_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/write.html#ensure_schema_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.write.ensure_schema_exists" title="Link to this definition"></a></dt>
+<dd><p>Create the given schema if it does not already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name to ensure.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.write.insert_hypertable">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.write.</span></span><span class="sig-name descname"><span class="pre">insert_hypertable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'timestamp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/write.html#insert_hypertable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.write.insert_hypertable" title="Link to this definition"></a></dt>
+<dd><p>Insert a pandas DataFrame into a TimescaleDB hypertable.</p>
+<p>The table and its columns are created automatically if they do not exist yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Target schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Target table name.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Data to insert.</p></li>
+<li><p><strong>index</strong> (<em>bool</em>) – Whether to persist the DataFrame index.</p></li>
+<li><p><strong>chunksize</strong> (<em>int</em>) – Batch size for inserts.</p></li>
+<li><p><strong>time_column</strong> (<em>str</em>) – Name of the time column.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-timescale_access.analysis">
+<dt class="sig sig-object py" id="timescale_access.analysis.get_duplicate_rows">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">get_duplicate_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#get_duplicate_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.get_duplicate_rows" title="Link to this definition"></a></dt>
+<dd><p>Return all rows where the combination (instrument_name, trade_seq) occurs multiple times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing all duplicate rows.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.analysis.get_hypertable_size">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">get_hypertable_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#get_hypertable_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.get_hypertable_size" title="Link to this definition"></a></dt>
+<dd><p>Return the total size of a TimescaleDB hypertable as a formatted string
+(for example <code class="docutils literal notranslate"><span class="pre">&quot;123</span> <span class="pre">MB&quot;</span></code>).</p>
+<p>The implementation:
+1. Retrieves the internal hypertable ID from <code class="docutils literal notranslate"><span class="pre">_timescaledb_catalog.hypertable</span></code>.
+2. Summarizes the size of all chunks in <code class="docutils literal notranslate"><span class="pre">_timescaledb_internal</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;raw_data&quot;</span></code>.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Hypertable name, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;btc_weekly&quot;</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total formatted size (for example <code class="docutils literal notranslate"><span class="pre">&quot;512</span> <span class="pre">MB&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;3</span> <span class="pre">GB&quot;</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the hypertable cannot be found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.analysis.get_missing_trade_seq">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">get_missing_trade_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#get_missing_trade_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.get_missing_trade_seq" title="Link to this definition"></a></dt>
+<dd><p>Return all expected but missing <code class="docutils literal notranslate"><span class="pre">trade_seq</span></code> values per <code class="docutils literal notranslate"><span class="pre">instrument_name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Missing sequence values per instrument.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.analysis.get_nonconsecutive_trade_seq">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">get_nonconsecutive_trade_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#get_nonconsecutive_trade_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.get_nonconsecutive_trade_seq" title="Link to this definition"></a></dt>
+<dd><p>Return all <code class="docutils literal notranslate"><span class="pre">trade_seq</span></code> rows where the sequence is not consecutive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rows with gaps in <code class="docutils literal notranslate"><span class="pre">trade_seq</span></code> per instrument.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.analysis.get_null_summary">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">get_null_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#get_null_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.get_null_summary" title="Link to this definition"></a></dt>
+<dd><p>Create (if necessary) and call a function that summarizes NULL values for any
+table in a schema.</p>
+<p>The function name is generated using the pattern:
+<code class="docutils literal notranslate"><span class="pre">check_nulls_in_{schema_name}_{table_name}</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Summary of NULL counts per column and instrument name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.analysis.get_row_count">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">get_row_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#get_row_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.get_row_count" title="Link to this definition"></a></dt>
+<dd><p>Return the number of rows in a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Schema name (for example <code class="docutils literal notranslate"><span class="pre">&quot;raw_data&quot;</span></code>).</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Table name (for example <code class="docutils literal notranslate"><span class="pre">&quot;btc_weekly&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of rows in the table.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="timescale_access.analysis.insert_hypertable_on_conflict">
+<span class="sig-prename descclassname"><span class="pre">timescale_access.analysis.</span></span><span class="sig-name descname"><span class="pre">insert_hypertable_on_conflict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timescale_access/analysis.html#insert_hypertable_on_conflict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timescale_access.analysis.insert_hypertable_on_conflict" title="Link to this definition"></a></dt>
+<dd><p>Insert a DataFrame into a TimescaleDB hypertable and avoid duplicates via
+<code class="docutils literal notranslate"><span class="pre">ON</span> <span class="pre">CONFLICT</span></code>.</p>
+<p>The function creates the table and columns as needed and ensures a UNIQUE
+index on <code class="docutils literal notranslate"><span class="pre">(instrument_name,</span> <span class="pre">trade_seq,</span> <span class="pre">timestamp)</span></code>. All index columns must
+be present as columns in the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine</em>) – SQLAlchemy engine.</p></li>
+<li><p><strong>schema_name</strong> (<em>str</em>) – Target schema.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – Target table name.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Data to insert.</p></li>
+<li><p><strong>time_column</strong> (<em>str</em>) – Time column for TimescaleDB.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, bxvtr.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
