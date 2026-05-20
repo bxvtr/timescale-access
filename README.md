@@ -5,12 +5,11 @@
 ![Docs Build](https://github.com/bxvtr/timescale-access/actions/workflows/docs.yaml/badge.svg)
 ![Lint](https://github.com/bxvtr/timescale-access/actions/workflows/lint.yaml/badge.svg)
 
-A lightweight and user-friendly Python wrapper for TimescaleDB/PostgreSQL, designed for time‑series data ingestion, schema management, and convenient querying using SQLAlchemy.  
+A lightweight and user-friendly Python wrapper for TimescaleDB/PostgreSQL, designed for time‑series data ingestion, schema management, and convenient querying using SQLAlchemy.
+
 Comes with a full development environment (VS Code Devcontainer + TimescaleDB), automated tests, and deployable Docker images via GHCR.
 
----
-
-## 🗄️ Key Features
+## Key Features
 
 - High‑level `TimescaleAccess` client for TimescaleDB  
 - Automatic hypertable creation and column inference  
@@ -25,9 +24,7 @@ Comes with a full development environment (VS Code Devcontainer + TimescaleDB), 
 - Devcontainer with automated setup for reproducible development  
 - GHCR-ready runtime Docker image  
 
----
-
-## 📦 Project Structure
+## Project Structure
 
 ```
 .
@@ -42,9 +39,7 @@ Comes with a full development environment (VS Code Devcontainer + TimescaleDB), 
 └── README.md
 ```
 
----
-
-## 📥 Installation
+## Installation
 
 ### From source  
 ```bash
@@ -61,9 +56,7 @@ pip install git+https://github.com/bxvtr/timescale-access.git
 docker pull ghcr.io/bxvtr/timescale-access:latest
 ```
 
----
-
-## ⚡ Quickstart Example
+## Quickstart Example
 
 ```python
 from timescale_access.client import TimescaleAccess
@@ -90,12 +83,7 @@ df_out = db.get_table("raw_data", "btc_trades")
 print(df_out)
 ```
 
-For the full API reference, visit the documentation:  
-👉 **https://bxvtr.github.io/timescale-access/**
-
----
-
-## 🧑‍💻 Development Environment (VS Code Devcontainer)
+## Development Environment (VS Code Devcontainer)
 
 This project ships with a complete dev environment:
 
@@ -109,9 +97,7 @@ Start the environment:
 Dev Containers: Rebuild and Reopen in Container
 ```
 
----
-
-## 🧪 Running Tests
+## Running Tests
 
 ```
 pytest
@@ -119,9 +105,7 @@ pytest
 
 Tests automatically connect to the TimescaleDB instance from docker-compose.
 
----
-
-## 📚 Documentation
+## Documentation
 
 Build locally:
 
@@ -130,13 +114,7 @@ cd docs
 make html
 ```
 
-Online docs:
-
-👉 **https://bxvtr.github.io/timescale-access/**
-
----
-
-## 🔧 API Overview
+## API Overview
 
 Main entry point:
 
@@ -149,6 +127,5 @@ Main entry point:
   - `get_hypertable_size()`
   - `get_missing_trade_seq()`
   - `ensure_schema_exists()`
-  - … and more
 
 See the full reference in the documentation.
