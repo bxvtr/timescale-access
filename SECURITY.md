@@ -7,8 +7,6 @@ Only the latest version on the `main` branch is actively maintained.
 Previous releases and historical states of the repository may not receive
 security updates or patches.
 
----
-
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability, please **do not open a public GitHub issue**.
@@ -27,8 +25,6 @@ When submitting a report, please include:
 
 Reports will be reviewed and handled through responsible disclosure.
 
----
-
 ## Security Scope
 
 This repository provides a Python interface for working with
@@ -45,15 +41,11 @@ Security considerations primarily relate to:
 - Credential handling
 - Dependency vulnerabilities
 
----
-
 ## Dependency Security
 
 - Dependencies are explicitly version-pinned
 - Supported Python versions are defined in `pyproject.toml`
 - Security-related updates are prioritized
-
----
 
 ## Responsible Usage
 
@@ -64,8 +56,6 @@ Users are responsible for:
 - Reviewing SQL execution contexts
 
 This project does not manage authentication, authorization, or infrastructure security.
-
----
 
 ## Disclosure Policy
 
